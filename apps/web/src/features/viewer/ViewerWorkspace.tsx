@@ -12,6 +12,10 @@ import {
   Highlighter,
   PenTool,
   FileSpreadsheet,
+  Sparkles,
+  Binary,
+  ShieldAlert,
+  Info,
 } from 'lucide-react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { useWorkspaceStore } from '../../store/workspaceStore';
@@ -35,6 +39,12 @@ import { useAnnotationStore } from '../annotate/annotationStore';
 import { FormFillModal } from '../forms/FormFillModal';
 import { SignaturePadModal } from '../sign/SignaturePadModal';
 import { SignaturePlacementOverlay } from '../sign/SignaturePlacementOverlay';
+
+// Phase 3 Edit, Watermark & Redaction Modals
+import { WatermarkModal } from '../edit/WatermarkModal';
+import { PageNumberModal } from '../edit/PageNumberModal';
+import { RedactionModal } from '../edit/RedactionModal';
+import { MetadataModal } from '../edit/MetadataModal';
 
 export const ViewerWorkspace: React.FC = () => {
   const {
@@ -72,6 +82,12 @@ export const ViewerWorkspace: React.FC = () => {
   const [showFormFill, setShowFormFill] = useState(false);
   const [showSignaturePad, setShowSignaturePad] = useState(false);
   const [activeSignatureUrl, setActiveSignatureUrl] = useState<string | null>(null);
+
+  // Phase 3 Edit, Watermark & Redaction Modals
+  const [showWatermark, setShowWatermark] = useState(false);
+  const [showPageNumbers, setShowPageNumbers] = useState(false);
+  const [showRedaction, setShowRedaction] = useState(false);
+  const [showMetadata, setShowMetadata] = useState(false);
 
   // References for rendering single page canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -159,6 +175,14 @@ export const ViewerWorkspace: React.FC = () => {
       setShowAnnotateToolbar(true);
     } else if (activeTool === 'sign') {
       setShowSignaturePad(true);
+    } else if (activeTool === 'watermark') {
+      setShowWatermark(true);
+    } else if (activeTool === 'page-numbers') {
+      setShowPageNumbers(true);
+    } else if (activeTool === 'redact-deep') {
+      setShowRedaction(true);
+    } else if (activeTool === 'metadata') {
+      setShowMetadata(true);
     }
   }, [activeTool]);
 
@@ -255,6 +279,34 @@ export const ViewerWorkspace: React.FC = () => {
           >
             <Lock className="w-3.5 h-3.5 text-slate-500" />
             <span>Protect</span>
+          </button>
+          <button
+            onClick={() => setShowWatermark(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-teal-500" />
+            <span>Watermark</span>
+          </button>
+          <button
+            onClick={() => setShowPageNumbers(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Binary className="w-3.5 h-3.5 text-blue-500" />
+            <span>Page # & Bates</span>
+          </button>
+          <button
+            onClick={() => setShowRedaction(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <ShieldAlert className="w-3.5 h-3.5 text-red-500" />
+            <span>Redact</span>
+          </button>
+          <button
+            onClick={() => setShowMetadata(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Info className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Info</span>
           </button>
         </div>
 
@@ -420,6 +472,36 @@ export const ViewerWorkspace: React.FC = () => {
         }}
         onSelectSignature={(dataUrl) => {
           setActiveSignatureUrl(dataUrl);
+        }}
+      />
+
+      {/* Phase 3 Modals */}
+      <WatermarkModal
+        isOpen={showWatermark}
+        onClose={() => {
+          setShowWatermark(false);
+          setActiveTool(null);
+        }}
+      />
+      <PageNumberModal
+        isOpen={showPageNumbers}
+        onClose={() => {
+          setShowPageNumbers(false);
+          setActiveTool(null);
+        }}
+      />
+      <RedactionModal
+        isOpen={showRedaction}
+        onClose={() => {
+          setShowRedaction(false);
+          setActiveTool(null);
+        }}
+      />
+      <MetadataModal
+        isOpen={showMetadata}
+        onClose={() => {
+          setShowMetadata(false);
+          setActiveTool(null);
         }}
       />
     </div>

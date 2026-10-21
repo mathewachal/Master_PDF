@@ -69,3 +69,20 @@
 - **Context:** Users need to inspect, fill, create, import/export, and permanently flatten interactive form fields.
 - **Decision:** Leverage `pdf-lib`'s AcroForm API for reading field types (`PDFTextField`, `PDFCheckBox`, `PDFDropdown`, `PDFRadioGroup`), filling values, and creating new fields. Expose JSON data binding for import/export.
 - **Consequence:** Standard-compliant AcroForm operations running entirely client-side without external dependencies.
+
+---
+
+## DECISION-010: Document Decorations & Bates Numbering via `pdf-lib`
+- **Status:** Accepted
+- **Context:** Watermarking, tiled background stamps, legal Bates numbering, and dynamic page numbering must run offline in the browser.
+- **Decision:** Implement text and image watermarks with configurable opacity, angle, and tiled grids using `pdf-lib`. Bates numbering generates formatted sequence tokens (e.g., `CONFIDENTIAL-000001`) with configurable prefix/suffix, digit padding, font size, and 6 standard anchor positions.
+- **Consequence:** Fast, offline document stamping without transmitting files to server.
+
+---
+
+## DECISION-011: Certified Deep Byte-Level Redaction via PyMuPDF (`fitz`)
+- **Status:** Accepted
+- **Context:** Blacking out text with client-side overlays is dangerous and leaves underlying text and vector streams intact in the PDF file (a frequent source of data leaks).
+- **Decision:** Perform true permanent redaction server-side using PyMuPDF (`fitz`), utilizing `page.add_redact_annot()` followed by `page.apply_redactions()`. Provide built-in regex presets for PII (emails, US phone numbers, SSNs, credit cards) and coordinate-based bounding box scrubbing. Implement automated post-redaction audit verification (`verify_clean`) to ensure zero matching strings remain in the file.
+- **Consequence:** Certified zero-leak redaction compliance for sensitive legal, financial, and healthcare documents.
+
