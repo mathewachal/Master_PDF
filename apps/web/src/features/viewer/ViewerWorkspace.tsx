@@ -19,6 +19,11 @@ import {
   Info,
   ScanText,
   Table,
+  GitCompare,
+  Accessibility,
+  Camera,
+  Wrench,
+  ShieldCheck,
 } from 'lucide-react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { useWorkspaceStore } from '../../store/workspaceStore';
@@ -53,6 +58,14 @@ import { MetadataModal } from '../edit/MetadataModal';
 import { ConvertModal } from '../convert/ConvertModal';
 import { TableExtractModal } from '../convert/TableExtractModal';
 import { OcrModal } from '../ocr/OcrModal';
+
+// Phase 5 Advanced Modals
+import { CertificateModal } from '../advanced/CertificateModal';
+import { OptimizeAdvancedModal } from '../advanced/OptimizeAdvancedModal';
+import { CompareModal } from '../compare/CompareModal';
+import { A11yModal } from '../a11y/A11yModal';
+import { BatchModal } from '../batch/BatchModal';
+import { CameraScanModal } from '../scan/CameraScanModal';
 
 export const ViewerWorkspace: React.FC = () => {
   const {
@@ -101,6 +114,14 @@ export const ViewerWorkspace: React.FC = () => {
   const [showConvertModal, setShowConvertModal] = useState(false);
   const [showTableModal, setShowTableModal] = useState(false);
   const [showOcrModal, setShowOcrModal] = useState(false);
+
+  // Phase 5 Advanced Modals
+  const [showCertModal, setShowCertModal] = useState(false);
+  const [showOptimizeAdvanced, setShowOptimizeAdvanced] = useState(false);
+  const [showCompareModal, setShowCompareModal] = useState(false);
+  const [showA11yModal, setShowA11yModal] = useState(false);
+  const [showBatchModal, setShowBatchModal] = useState(false);
+  const [showScanModal, setShowScanModal] = useState(false);
 
   // References for rendering single page canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -200,6 +221,18 @@ export const ViewerWorkspace: React.FC = () => {
       setShowOcrModal(true);
     } else if (activeTool === 'extract-tables') {
       setShowTableModal(true);
+    } else if (activeTool === 'verify-sign' || activeTool === 'cert-sign') {
+      setShowCertModal(true);
+    } else if (activeTool === 'repair' || activeTool === 'linearize' || activeTool === 'sanitize') {
+      setShowOptimizeAdvanced(true);
+    } else if (activeTool === 'compare') {
+      setShowCompareModal(true);
+    } else if (activeTool === 'a11y') {
+      setShowA11yModal(true);
+    } else if (activeTool === 'batch') {
+      setShowBatchModal(true);
+    } else if (activeTool === 'scan') {
+      setShowScanModal(true);
     }
   }, [activeTool]);
 
@@ -345,6 +378,48 @@ export const ViewerWorkspace: React.FC = () => {
           >
             <Table className="w-3.5 h-3.5 text-emerald-500" />
             <span>Tables</span>
+          </button>
+          <button
+            onClick={() => setShowCompareModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <GitCompare className="w-3.5 h-3.5 text-blue-500" />
+            <span>Compare</span>
+          </button>
+          <button
+            onClick={() => setShowCertModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-purple-500" />
+            <span>Certify</span>
+          </button>
+          <button
+            onClick={() => setShowOptimizeAdvanced(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Wrench className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Repair</span>
+          </button>
+          <button
+            onClick={() => setShowA11yModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Accessibility className="w-3.5 h-3.5 text-teal-500" />
+            <span>A11y</span>
+          </button>
+          <button
+            onClick={() => setShowScanModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Camera className="w-3.5 h-3.5 text-sky-500" />
+            <span>Camera</span>
+          </button>
+          <button
+            onClick={() => setShowBatchModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Layers className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Batch</span>
           </button>
         </div>
 
@@ -562,6 +637,50 @@ export const ViewerWorkspace: React.FC = () => {
         isOpen={showOcrModal}
         onClose={() => {
           setShowOcrModal(false);
+          setActiveTool(null);
+        }}
+      />
+
+      {/* Phase 5 Modals */}
+      <CertificateModal
+        isOpen={showCertModal}
+        onClose={() => {
+          setShowCertModal(false);
+          setActiveTool(null);
+        }}
+      />
+      <OptimizeAdvancedModal
+        isOpen={showOptimizeAdvanced}
+        onClose={() => {
+          setShowOptimizeAdvanced(false);
+          setActiveTool(null);
+        }}
+      />
+      <CompareModal
+        isOpen={showCompareModal}
+        onClose={() => {
+          setShowCompareModal(false);
+          setActiveTool(null);
+        }}
+      />
+      <A11yModal
+        isOpen={showA11yModal}
+        onClose={() => {
+          setShowA11yModal(false);
+          setActiveTool(null);
+        }}
+      />
+      <BatchModal
+        isOpen={showBatchModal}
+        onClose={() => {
+          setShowBatchModal(false);
+          setActiveTool(null);
+        }}
+      />
+      <CameraScanModal
+        isOpen={showScanModal}
+        onClose={() => {
+          setShowScanModal(false);
           setActiveTool(null);
         }}
       />

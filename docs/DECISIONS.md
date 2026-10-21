@@ -115,4 +115,32 @@
 - **Decision:** Provide an OCR router supporting multi-language ISO codes (`eng`, `spa`, `fra`, `deu`, `ita`, `por`, `chi_sim`, `jpn`, `rus`, `ara`, `hin`), auto-deskewing, and multiple output targets: searchable PDF (invisible OCR text layer rendered over the scanned image), structured Markdown, or clean text.
 - **Consequence:** Scanned documents can be searched, copied, and edited while preserving original page scans.
 
+---
+
+## DECISION-015: PKCS#12 Digital Signature Certification & Cryptographic Verification
+- **Status:** Accepted
+- **Context:** Legal, banking, and enterprise agreements require standard digital signatures adhering to PAdES / PKCS#7 specifications.
+- **Decision:** Implement digital signature inspection and cryptographic signing using `cryptography` and `pikepdf`. The backend verifies X.509 certificate chains, byte ranges, validity timestamps, and signer identity. Users can sign documents with their PKCS#12 (.pfx/.p12) credentials or generate test certificates for local certification.
+- **Consequence:** Standard-compliant digital signatures without reliance on expensive third-party SaaS signing APIs.
+
+---
+
+## DECISION-016: Document Structural Maintenance (Linearization, Repair, Sanitization)
+- **Status:** Accepted
+- **Context:** PDFs are frequently shared on web browsers, corrupted by network transfers, or leaked with tracking metadata and embedded scripts.
+- **Decision:** Implement automated maintenance pipelines via `pikepdf`:
+  - Linearization orders PDF objects for progressive byte-range streaming ("Fast Web View").
+  - Repair reconstructs damaged cross-reference tables and regenerates missing object references.
+  - Sanitization permanently removes embedded JavaScript triggers, Launch actions, attachments, XFA forms, and XMP tracking metadata.
+- **Consequence:** Bulletproof document health, web performance, and security compliance.
+
+---
+
+## DECISION-017: Multi-Document Text & Structural Diffing
+- **Status:** Accepted
+- **Context:** Contract negotiations and revisions require rapid detection of textual and structural alterations across PDF versions.
+- **Decision:** Implement a dual-tier comparison engine. The backend analyzes text stream blocks across corresponding pages via unified diff algorithms, extracting added/deleted lines and modification metrics. The frontend renders side-by-side comparison with green/red line diff highlights.
+- **Consequence:** Instant, visual contract change auditing across revisions.
+
+
 

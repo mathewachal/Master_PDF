@@ -14,6 +14,13 @@ import {
   ScanText,
   FileCheck,
   Table,
+  GitCompare,
+  ShieldCheck,
+  Wrench,
+  Zap,
+  Accessibility,
+  Camera,
+  Layers,
   X,
 } from 'lucide-react';
 import { useWorkspaceStore } from '../../store/workspaceStore';
@@ -45,6 +52,14 @@ const TOOLS: ToolAction[] = [
   { id: 'ocr', name: 'Recognize Text (OCR)', category: 'Convert & OCR', icon: <ScanText className="w-4 h-4" />, isLocal: false },
   { id: 'convert-office', name: 'Convert to Word, Excel, Markdown', category: 'Convert', icon: <FileText className="w-4 h-4" />, isLocal: false },
   { id: 'verify-sign', name: 'Verify Certificate Signatures', category: 'Security', icon: <FileCheck className="w-4 h-4" />, isLocal: false },
+  { id: 'cert-sign', name: 'Sign with Digital Certificate (PKCS#12)', category: 'Security', icon: <ShieldCheck className="w-4 h-4" />, isLocal: false },
+  { id: 'compare', name: 'Compare Two PDF Documents', category: 'Review', icon: <GitCompare className="w-4 h-4" />, isLocal: false },
+  { id: 'linearize', name: 'Linearize (Fast Web View)', category: 'Optimize', icon: <Zap className="w-4 h-4" />, isLocal: false },
+  { id: 'repair', name: 'Repair Damaged PDF Structure', category: 'Optimize', icon: <Wrench className="w-4 h-4" />, isLocal: false },
+  { id: 'sanitize', name: 'Deep Privacy Sanitize', category: 'Security', icon: <Lock className="w-4 h-4" />, isLocal: false },
+  { id: 'a11y', name: 'Accessibility Checker (WCAG & PDF/UA)', category: 'Review', icon: <Accessibility className="w-4 h-4" />, isLocal: true },
+  { id: 'scan', name: 'Scan-to-PDF via Camera', category: 'Create', icon: <Camera className="w-4 h-4" />, isLocal: true },
+  { id: 'batch', name: 'Batch Processing Workflows', category: 'Automation', icon: <Layers className="w-4 h-4" />, isLocal: false },
 ];
 
 export const CommandPalette: React.FC = () => {

@@ -87,6 +87,8 @@ export const HomeScreen: React.FC = () => {
       setActiveTool('merge');
     } else if (toolId === 'img_to_pdf') {
       setActiveTool('convert-images');
+    } else if (toolId === 'scan' || toolId === 'batch') {
+      setActiveTool(toolId);
     } else {
       handleOpenLocalFile(toolId);
     }

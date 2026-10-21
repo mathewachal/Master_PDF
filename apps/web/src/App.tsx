@@ -10,6 +10,8 @@ import { ViewerWorkspace } from './features/viewer/ViewerWorkspace';
 
 import { MergeModal } from './features/organize/MergeModal';
 import { ImageConvertModal } from './features/convert/ImageConvertModal';
+import { BatchModal } from './features/batch/BatchModal';
+import { CameraScanModal } from './features/scan/CameraScanModal';
 
 export const App: React.FC = () => {
   const { document: activeDoc, theme, activeTool, setActiveTool } = useWorkspaceStore();
@@ -47,6 +49,14 @@ export const App: React.FC = () => {
             <ImageConvertModal
               isOpen={activeTool === 'convert-images' || activeTool === 'img_to_pdf'}
               initialMode="img_to_pdf"
+              onClose={() => setActiveTool(null)}
+            />
+            <BatchModal
+              isOpen={activeTool === 'batch'}
+              onClose={() => setActiveTool(null)}
+            />
+            <CameraScanModal
+              isOpen={activeTool === 'scan'}
               onClose={() => setActiveTool(null)}
             />
           </>
