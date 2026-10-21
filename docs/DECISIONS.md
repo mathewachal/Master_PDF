@@ -53,3 +53,19 @@
 - **Context:** Standard PDF-1.7/2.0 AES-256 password protection and granular permission enforcement (printing, assembly, annotation permissions) requires cryptographic standards compliance.
 - **Decision:** Implement PDF protection and decryption in the FastAPI backend via `pikepdf` (QPDF wrapper), while `pdfjs-dist` on the client handles encrypted document detection and password prompting.
 - **Consequence:** Bulletproof AES-256 encryption without browser bundle bloat.
+
+---
+
+## DECISION-008: Vector Annotation Overlay & Bottom-Left Coordinate Mapping
+- **Status:** Accepted
+- **Context:** Annotations (freehand, shapes, stamps, notes, measurements) must render seamlessly over PDF canvases and be burnable directly into PDF content streams.
+- **Decision:** Use an SVG vector overlay synchronized to the page scale and viewport dimensions for interaction. On "Flatten", translate browser top-left coordinates to PDF bottom-left coordinates (`pageHeight - y - height`) and burn primitives using `pdf-lib`.
+- **Consequence:** Flawless visual accuracy, zero external canvas library overhead, and 100% offline vector flattening into PDF streams.
+
+---
+
+## DECISION-009: Interactive AcroForm Management & JSON Data Binding
+- **Status:** Accepted
+- **Context:** Users need to inspect, fill, create, import/export, and permanently flatten interactive form fields.
+- **Decision:** Leverage `pdf-lib`'s AcroForm API for reading field types (`PDFTextField`, `PDFCheckBox`, `PDFDropdown`, `PDFRadioGroup`), filling values, and creating new fields. Expose JSON data binding for import/export.
+- **Consequence:** Standard-compliant AcroForm operations running entirely client-side without external dependencies.
