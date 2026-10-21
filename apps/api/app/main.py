@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.cleanup import cleanup_expired_files
-from app.routers import health, jobs
+from app.routers import health, jobs, security
 
 
 async def periodic_cleanup_task():
@@ -46,6 +46,7 @@ app.add_middleware(
 # Mount Routers
 app.include_router(health.router, prefix="/api/v1")
 app.include_router(jobs.router, prefix="/api/v1")
+app.include_router(security.router, prefix="/api/v1")
 
 
 @app.get("/")

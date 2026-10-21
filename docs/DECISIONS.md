@@ -37,3 +37,19 @@
 - **Context:** Uploaded user files must be protected and purged promptly to comply with privacy requirements.
 - **Decision:** Store temporary job artifacts in isolated directories named by UUID. Run an automated background cleanup worker purging files older than 30 minutes, and purge immediately upon client download when requested.
 - **Consequence:** Server avoids storage leaks and respects user privacy.
+
+---
+
+## DECISION-006: Client-Side Core Engine Integration (`pdfjs-dist` + `pdf-lib`)
+- **Status:** Accepted
+- **Context:** Phase 1 requires fast viewing, page organization, and client-side conversions without locking the browser UI thread.
+- **Decision:** Use `pdfjs-dist` running via Vite Web Worker module (`pdf.worker.mjs?url`) for viewport rendering, high-DPI scaling, and thumbnail generation. Use `pdf-lib` for in-memory page mutations (merge, split, rotate, delete, insert, reorder, image-to-PDF).
+- **Consequence:** 100% offline capability for core PDF manipulation; snappy performance even on large documents.
+
+---
+
+## DECISION-007: AES-256 PDF Encryption via `pikepdf` Service
+- **Status:** Accepted
+- **Context:** Standard PDF-1.7/2.0 AES-256 password protection and granular permission enforcement (printing, assembly, annotation permissions) requires cryptographic standards compliance.
+- **Decision:** Implement PDF protection and decryption in the FastAPI backend via `pikepdf` (QPDF wrapper), while `pdfjs-dist` on the client handles encrypted document detection and password prompting.
+- **Consequence:** Bulletproof AES-256 encryption without browser bundle bloat.

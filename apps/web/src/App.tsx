@@ -8,8 +8,11 @@ import { CommandPalette } from './components/shell/CommandPalette';
 import { HomeScreen } from './features/home/HomeScreen';
 import { ViewerWorkspace } from './features/viewer/ViewerWorkspace';
 
+import { MergeModal } from './features/organize/MergeModal';
+import { ImageConvertModal } from './features/convert/ImageConvertModal';
+
 export const App: React.FC = () => {
-  const { document: activeDoc, theme } = useWorkspaceStore();
+  const { document: activeDoc, theme, activeTool, setActiveTool } = useWorkspaceStore();
 
   // Sync theme with HTML root class
   useEffect(() => {
@@ -34,7 +37,19 @@ export const App: React.FC = () => {
             <PropertiesPanel />
           </>
         ) : (
-          <HomeScreen />
+          <>
+            <HomeScreen />
+            {/* Standalone modals from Home screen */}
+            <MergeModal
+              isOpen={activeTool === 'merge'}
+              onClose={() => setActiveTool(null)}
+            />
+            <ImageConvertModal
+              isOpen={activeTool === 'convert-images' || activeTool === 'img_to_pdf'}
+              initialMode="img_to_pdf"
+              onClose={() => setActiveTool(null)}
+            />
+          </>
         )}
       </div>
 
