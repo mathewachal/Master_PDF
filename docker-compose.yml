@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: master_pdf_api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - DEBUG=true
+      - TEMP_FILE_TTL_MINUTES=30
+      - CORS_ORIGINS=["http://localhost:5173", "http://localhost:3000"]
+    volumes:
+      - ./apps/api:/app
+      - api_tmp:/app/data/tmp
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: master_pdf_web
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+volumes:
+  api_tmp:

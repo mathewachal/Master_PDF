@@ -1,0 +1,26 @@
+{
+  "name": "master-pdf",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Master_PDF - Premium, Privacy-First All-in-One PDF Toolkit",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=apps/web",
+    "test": "npm run test --workspace=apps/web",
+    "lint": "npm run lint --workspace=apps/web",
+    "api:dev": "python -m uvicorn app.main:app --app-dir apps/api --reload --port 8000",
+    "api:test": "python -m pytest apps/api/tests",
+    "api:lint": "ruff check apps/api"
+  },
+  "keywords": [
+    "pdf",
+    "pdf-tools",
+    "pdf-editor",
+    "privacy-first"
+  ],
+  "author": "",
+  "license": "MIT"
+}
