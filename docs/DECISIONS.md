@@ -86,3 +86,33 @@
 - **Decision:** Perform true permanent redaction server-side using PyMuPDF (`fitz`), utilizing `page.add_redact_annot()` followed by `page.apply_redactions()`. Provide built-in regex presets for PII (emails, US phone numbers, SSNs, credit cards) and coordinate-based bounding box scrubbing. Implement automated post-redaction audit verification (`verify_clean`) to ensure zero matching strings remain in the file.
 - **Consequence:** Certified zero-leak redaction compliance for sensitive legal, financial, and healthcare documents.
 
+---
+
+## DECISION-012: Multi-Format Document Conversion Pipeline
+- **Status:** Accepted
+- **Context:** Users require bi-directional document transformation between PDF and Word (.docx), Excel (.xlsx), CSV, Markdown (.md), Plain Text (.txt), HTML, and archival PDF/A standards.
+- **Decision:** Implement specialized converter pipelines:
+  - `PDF -> Markdown`: powered by `pymupdf4llm` preserving headings, lists, tables, and typography.
+  - `PDF -> Word (.docx)`: builds structured `.docx` documents using `python-docx`, parsing PDF text blocks and detected tables.
+  - `PDF -> HTML`: outputs responsive, standalone HTML with typography styling.
+  - `PDF -> PDF/A`: standardizes PDF conformance to ISO 19005 (PDF/A-1b / PDF/A-2b) with embedded color profiles and linearization via `pikepdf`.
+  - `Text/Markdown -> PDF`: parses typography and headings into paginated PDF layouts using PyMuPDF.
+- **Consequence:** High-fidelity document conversions without heavyweight external dependencies.
+
+---
+
+## DECISION-013: Layout-Aware Table Extraction & Structured Export
+- **Status:** Accepted
+- **Context:** Financial, legal, and operational documents contain critical tabular data that users need to extract into spreadsheets or databases.
+- **Decision:** Use PyMuPDF's `find_tables()` engine to detect explicit and whitespace-based table boundaries, extracting cell contents, row headers, and geometry coordinates. Export extracted tables to styled multi-sheet Excel workbooks via `openpyxl` with auto-fit column widths and alternating row colors, or to raw CSV / JSON.
+- **Consequence:** 1-click table extraction with instant preview and formatted Excel export.
+
+---
+
+## DECISION-014: Multi-Language OCR Architecture with Searchable PDF Generation
+- **Status:** Accepted
+- **Context:** Scanned PDFs and mobile camera snapshots require optical character recognition to become searchable and indexable.
+- **Decision:** Provide an OCR router supporting multi-language ISO codes (`eng`, `spa`, `fra`, `deu`, `ita`, `por`, `chi_sim`, `jpn`, `rus`, `ara`, `hin`), auto-deskewing, and multiple output targets: searchable PDF (invisible OCR text layer rendered over the scanned image), structured Markdown, or clean text.
+- **Consequence:** Scanned documents can be searched, copied, and edited while preserving original page scans.
+
+

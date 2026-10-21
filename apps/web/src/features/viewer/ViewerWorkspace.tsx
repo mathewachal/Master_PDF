@@ -12,10 +12,13 @@ import {
   Highlighter,
   PenTool,
   FileSpreadsheet,
+  FileText,
   Sparkles,
   Binary,
   ShieldAlert,
   Info,
+  ScanText,
+  Table,
 } from 'lucide-react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { useWorkspaceStore } from '../../store/workspaceStore';
@@ -45,6 +48,11 @@ import { WatermarkModal } from '../edit/WatermarkModal';
 import { PageNumberModal } from '../edit/PageNumberModal';
 import { RedactionModal } from '../edit/RedactionModal';
 import { MetadataModal } from '../edit/MetadataModal';
+
+// Phase 4 Convert, OCR & Table Modals
+import { ConvertModal } from '../convert/ConvertModal';
+import { TableExtractModal } from '../convert/TableExtractModal';
+import { OcrModal } from '../ocr/OcrModal';
 
 export const ViewerWorkspace: React.FC = () => {
   const {
@@ -88,6 +96,11 @@ export const ViewerWorkspace: React.FC = () => {
   const [showPageNumbers, setShowPageNumbers] = useState(false);
   const [showRedaction, setShowRedaction] = useState(false);
   const [showMetadata, setShowMetadata] = useState(false);
+
+  // Phase 4 Convert, Tables & OCR Modals
+  const [showConvertModal, setShowConvertModal] = useState(false);
+  const [showTableModal, setShowTableModal] = useState(false);
+  const [showOcrModal, setShowOcrModal] = useState(false);
 
   // References for rendering single page canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -169,8 +182,8 @@ export const ViewerWorkspace: React.FC = () => {
       setShowCompress(true);
     } else if (activeTool === 'protect' || activeTool === 'unlock') {
       setShowSecurity(true);
-    } else if (activeTool === 'convert-office') {
-      setShowConvert(true);
+    } else if (activeTool === 'convert-office' || activeTool === 'convert' || activeTool === 'pdf-to-word') {
+      setShowConvertModal(true);
     } else if (activeTool === 'annotate') {
       setShowAnnotateToolbar(true);
     } else if (activeTool === 'sign') {
@@ -183,6 +196,10 @@ export const ViewerWorkspace: React.FC = () => {
       setShowRedaction(true);
     } else if (activeTool === 'metadata') {
       setShowMetadata(true);
+    } else if (activeTool === 'ocr') {
+      setShowOcrModal(true);
+    } else if (activeTool === 'extract-tables') {
+      setShowTableModal(true);
     }
   }, [activeTool]);
 
@@ -307,6 +324,27 @@ export const ViewerWorkspace: React.FC = () => {
           >
             <Info className="w-3.5 h-3.5 text-indigo-500" />
             <span>Info</span>
+          </button>
+          <button
+            onClick={() => setShowConvertModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <FileText className="w-3.5 h-3.5 text-blue-500" />
+            <span>Convert</span>
+          </button>
+          <button
+            onClick={() => setShowOcrModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <ScanText className="w-3.5 h-3.5 text-orange-500" />
+            <span>OCR</span>
+          </button>
+          <button
+            onClick={() => setShowTableModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <Table className="w-3.5 h-3.5 text-emerald-500" />
+            <span>Tables</span>
           </button>
         </div>
 
@@ -501,6 +539,29 @@ export const ViewerWorkspace: React.FC = () => {
         isOpen={showMetadata}
         onClose={() => {
           setShowMetadata(false);
+          setActiveTool(null);
+        }}
+      />
+
+      {/* Phase 4 Modals */}
+      <ConvertModal
+        isOpen={showConvertModal}
+        onClose={() => {
+          setShowConvertModal(false);
+          setActiveTool(null);
+        }}
+      />
+      <TableExtractModal
+        isOpen={showTableModal}
+        onClose={() => {
+          setShowTableModal(false);
+          setActiveTool(null);
+        }}
+      />
+      <OcrModal
+        isOpen={showOcrModal}
+        onClose={() => {
+          setShowOcrModal(false);
           setActiveTool(null);
         }}
       />

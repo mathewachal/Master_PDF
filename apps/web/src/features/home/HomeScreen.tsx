@@ -85,7 +85,7 @@ export const HomeScreen: React.FC = () => {
   const handleToolCardClick = (toolId: string) => {
     if (toolId === 'merge') {
       setActiveTool('merge');
-    } else if (toolId === 'convert-office' || toolId === 'img_to_pdf') {
+    } else if (toolId === 'img_to_pdf') {
       setActiveTool('convert-images');
     } else {
       handleOpenLocalFile(toolId);

@@ -13,6 +13,7 @@ import {
   Minimize2,
   ScanText,
   FileCheck,
+  Table,
   X,
 } from 'lucide-react';
 import { useWorkspaceStore } from '../../store/workspaceStore';
@@ -38,10 +39,11 @@ const TOOLS: ToolAction[] = [
   { id: 'page-numbers', name: 'Page Numbers & Bates', category: 'Edit', icon: <FileText className="w-4 h-4" />, isLocal: true },
   { id: 'redact-deep', name: 'Permanent Redaction (Byte-level)', category: 'Security', icon: <Lock className="w-4 h-4" />, isLocal: false },
   { id: 'metadata', name: 'Edit PDF Metadata', category: 'Edit', icon: <FileCheck className="w-4 h-4" />, isLocal: true },
+  { id: 'extract-tables', name: 'Extract Tables to Excel/CSV', category: 'Convert', icon: <Table className="w-4 h-4" />, isLocal: false },
   { id: 'protect', name: 'Protect & Encrypt', category: 'Security', icon: <Lock className="w-4 h-4" />, isLocal: true },
   { id: 'unlock', name: 'Unlock Password', category: 'Security', icon: <Unlock className="w-4 h-4" />, isLocal: true },
   { id: 'ocr', name: 'Recognize Text (OCR)', category: 'Convert & OCR', icon: <ScanText className="w-4 h-4" />, isLocal: false },
-  { id: 'pdf-to-word', name: 'Convert to Word', category: 'Convert', icon: <FileText className="w-4 h-4" />, isLocal: false },
+  { id: 'convert-office', name: 'Convert to Word, Excel, Markdown', category: 'Convert', icon: <FileText className="w-4 h-4" />, isLocal: false },
   { id: 'verify-sign', name: 'Verify Certificate Signatures', category: 'Security', icon: <FileCheck className="w-4 h-4" />, isLocal: false },
 ];
 
