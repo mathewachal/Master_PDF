@@ -21,6 +21,7 @@ import {
   Accessibility,
   Camera,
   Layers,
+  Sparkles,
   X,
 } from 'lucide-react';
 import { useWorkspaceStore } from '../../store/workspaceStore';
@@ -60,6 +61,7 @@ const TOOLS: ToolAction[] = [
   { id: 'a11y', name: 'Accessibility Checker (WCAG & PDF/UA)', category: 'Review', icon: <Accessibility className="w-4 h-4" />, isLocal: true },
   { id: 'scan', name: 'Scan-to-PDF via Camera', category: 'Create', icon: <Camera className="w-4 h-4" />, isLocal: true },
   { id: 'batch', name: 'Batch Processing Workflows', category: 'Automation', icon: <Layers className="w-4 h-4" />, isLocal: false },
+  { id: 'ai', name: 'AI Assistant (Chat, Summarize & Extract)', category: 'AI', icon: <Sparkles className="w-4 h-4" />, isLocal: false },
 ];
 
 export const CommandPalette: React.FC = () => {

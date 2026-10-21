@@ -67,6 +67,9 @@ import { A11yModal } from '../a11y/A11yModal';
 import { BatchModal } from '../batch/BatchModal';
 import { CameraScanModal } from '../scan/CameraScanModal';
 
+// Phase 6 AI Assistant Modal
+import { AiAssistantModal } from '../ai/AiAssistantModal';
+
 export const ViewerWorkspace: React.FC = () => {
   const {
     document: activeDoc,
@@ -122,6 +125,9 @@ export const ViewerWorkspace: React.FC = () => {
   const [showA11yModal, setShowA11yModal] = useState(false);
   const [showBatchModal, setShowBatchModal] = useState(false);
   const [showScanModal, setShowScanModal] = useState(false);
+
+  // Phase 6 AI Assistant Modal
+  const [showAiModal, setShowAiModal] = useState(false);
 
   // References for rendering single page canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -233,6 +239,8 @@ export const ViewerWorkspace: React.FC = () => {
       setShowBatchModal(true);
     } else if (activeTool === 'scan') {
       setShowScanModal(true);
+    } else if (activeTool === 'ai' || activeTool === 'ai-chat' || activeTool === 'ai-summary') {
+      setShowAiModal(true);
     }
   }, [activeTool]);
 
@@ -420,6 +428,14 @@ export const ViewerWorkspace: React.FC = () => {
           >
             <Layers className="w-3.5 h-3.5 text-indigo-500" />
             <span>Batch</span>
+          </button>
+          <button
+            onClick={() => setShowAiModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-brand-50 to-indigo-50 dark:from-brand-950/40 dark:to-indigo-950/40 text-brand-600 dark:text-brand-300 hover:opacity-90 border border-brand-200 dark:border-brand-800 shadow-sm"
+            title="AI Document Intelligence (Chat, Summarize & Extract)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-brand-500" />
+            <span>AI Assistant</span>
           </button>
         </div>
 
@@ -681,6 +697,13 @@ export const ViewerWorkspace: React.FC = () => {
         isOpen={showScanModal}
         onClose={() => {
           setShowScanModal(false);
+          setActiveTool(null);
+        }}
+      />
+      <AiAssistantModal
+        isOpen={showAiModal}
+        onClose={() => {
+          setShowAiModal(false);
           setActiveTool(null);
         }}
       />

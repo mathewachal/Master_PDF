@@ -142,5 +142,23 @@
 - **Decision:** Implement a dual-tier comparison engine. The backend analyzes text stream blocks across corresponding pages via unified diff algorithms, extracting added/deleted lines and modification metrics. The frontend renders side-by-side comparison with green/red line diff highlights.
 - **Consequence:** Instant, visual contract change auditing across revisions.
 
+---
 
+## DECISION-018: Multi-Step Batch Automation and Camera Document Scanning
+- **Status:** Accepted
+- **Context:** Enterprise workflows often require running repetitive multi-step actions (compress, watermark, sanitize, linearize) across dozens of files simultaneously, as well as capturing paper documents via camera.
+- **Decision:**
+  - Build a client-orchestrated Batch Queue modal that executes atomic pipelines over arbitrary lists of PDF documents with real-time per-file progress meters and auto-zip download.
+  - Implement a mobile-first Scan modal leveraging `navigator.mediaDevices.getUserMedia` and platform camera abstractions with edge detection filters (B&W High Contrast, Grayscale, Color Document) and auto-conversion to PDF via `pdf-lib`.
+- **Consequence:** Eliminates tedious manual repetition and seamlessly bridges paper document capture into digital PDF workflows.
 
+---
+
+## DECISION-019: Pluggable Provider-Agnostic LLM Interface with Offline Demo Mode
+- **Status:** Accepted
+- **Context:** Modern PDF workflows require intelligent document interaction (Q&A, executive summaries, bulleted insights, action item extraction, entity/PII detection). However, sending user documents to external AI providers without consent violates privacy requirements, and network connectivity may be unavailable.
+- **Decision:**
+  - Implement a unified client-side AI interface (`apps/web/src/features/ai/`) supporting OpenAI, Anthropic Claude, Google Gemini, and local private Ollama instances (`http://localhost:11434`).
+  - Provide a built-in zero-network **Demo/Offline Mode** featuring intelligent heuristic extraction: rule-based summary generation, regex-powered entity detection (dates, monetary amounts, emails, phone numbers, SSNs, credit card numbers), and context-aware responses.
+  - Store API keys strictly in client-side storage with an explicit toggle to disable AI globally.
+- **Consequence:** Uncompromising privacy and guaranteed 100% offline functionality, while giving users frictionless access to cutting-edge cloud LLMs when desired.
