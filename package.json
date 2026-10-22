@@ -11,7 +11,7 @@
     "build": "npm run build --workspace=apps/web",
     "test": "npm run test --workspace=apps/web",
     "lint": "npm run lint --workspace=apps/web",
-    "api:dev": "python -m uvicorn app.main:app --app-dir apps/api --reload --port 8000",
+    "api:dev": "python -m uvicorn app.main:app --app-dir apps/api --reload --reload-dir apps/api --port 8000",
     "api:test": "python -m pytest apps/api/tests",
     "api:lint": "ruff check apps/api"
   },

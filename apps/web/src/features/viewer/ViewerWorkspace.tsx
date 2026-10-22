@@ -1,35 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  RotateCw,
-  Lock,
-  Minimize2,
-  Split,
-  Merge,
-  Image as ImageIcon,
-  Layers,
-  KeyRound,
-  AlertCircle,
-  Highlighter,
-  PenTool,
-  FileSpreadsheet,
-  FileText,
-  Sparkles,
-  Binary,
-  ShieldAlert,
-  Info,
-  ScanText,
-  Table,
-  GitCompare,
-  Accessibility,
-  Camera,
-  Wrench,
-  ShieldCheck,
-} from 'lucide-react';
+import { KeyRound, AlertCircle } from 'lucide-react';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { useWorkspaceStore } from '../../store/workspaceStore';
 import { loadPdfDocument } from '../../core/pdf/engine';
 import { renderPageToCanvas } from '../../core/pdf/render';
-import { Button } from '../../components/ui/Button';
+import { ViewerToolbar } from './ViewerToolbar';
 
 // Phase 1 Modals
 import { OrganizeModal } from '../organize/OrganizeModal';
@@ -268,190 +243,34 @@ export const ViewerWorkspace: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col bg-slate-100/80 dark:bg-slate-950 overflow-hidden relative">
-      {/* Top Contextual Action Toolbar */}
-      <div className="h-11 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 flex items-center justify-between z-10 select-none">
-        <div className="flex items-center gap-1.5 overflow-x-auto py-1">
-          <button
-            onClick={() => setShowOrganize(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Layers className="w-3.5 h-3.5 text-blue-500" />
-            <span>Organize</span>
-          </button>
-          <button
-            onClick={() => setShowAnnotateToolbar(!showAnnotateToolbar)}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              showAnnotateToolbar
-                ? 'bg-brand-50 text-brand-600 dark:bg-brand-950/60 dark:text-brand-400 font-semibold ring-1 ring-brand-500'
-                : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-          >
-            <Highlighter className="w-3.5 h-3.5 text-amber-500" />
-            <span>Annotate</span>
-          </button>
-          <button
-            onClick={() => setShowSignaturePad(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <PenTool className="w-3.5 h-3.5 text-purple-500" />
-            <span>Sign</span>
-          </button>
-          <button
-            onClick={() => setShowFormFill(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-green-500" />
-            <span>Forms</span>
-          </button>
-          <button
-            onClick={() => setShowMerge(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Merge className="w-3.5 h-3.5 text-indigo-500" />
-            <span>Merge</span>
-          </button>
-          <button
-            onClick={() => setShowSplit(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Split className="w-3.5 h-3.5 text-rose-500" />
-            <span>Split</span>
-          </button>
-          <button
-            onClick={() => setShowCompress(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Minimize2 className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Compress</span>
-          </button>
-          <button
-            onClick={() => setShowConvert(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <ImageIcon className="w-3.5 h-3.5 text-cyan-500" />
-            <span>Images</span>
-          </button>
-          <button
-            onClick={() => setShowSecurity(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Lock className="w-3.5 h-3.5 text-slate-500" />
-            <span>Protect</span>
-          </button>
-          <button
-            onClick={() => setShowWatermark(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-teal-500" />
-            <span>Watermark</span>
-          </button>
-          <button
-            onClick={() => setShowPageNumbers(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Binary className="w-3.5 h-3.5 text-blue-500" />
-            <span>Page # & Bates</span>
-          </button>
-          <button
-            onClick={() => setShowRedaction(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <ShieldAlert className="w-3.5 h-3.5 text-red-500" />
-            <span>Redact</span>
-          </button>
-          <button
-            onClick={() => setShowMetadata(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Info className="w-3.5 h-3.5 text-indigo-500" />
-            <span>Info</span>
-          </button>
-          <button
-            onClick={() => setShowConvertModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <FileText className="w-3.5 h-3.5 text-blue-500" />
-            <span>Convert</span>
-          </button>
-          <button
-            onClick={() => setShowOcrModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <ScanText className="w-3.5 h-3.5 text-orange-500" />
-            <span>OCR</span>
-          </button>
-          <button
-            onClick={() => setShowTableModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Table className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Tables</span>
-          </button>
-          <button
-            onClick={() => setShowCompareModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <GitCompare className="w-3.5 h-3.5 text-blue-500" />
-            <span>Compare</span>
-          </button>
-          <button
-            onClick={() => setShowCertModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-purple-500" />
-            <span>Certify</span>
-          </button>
-          <button
-            onClick={() => setShowOptimizeAdvanced(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Wrench className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Repair</span>
-          </button>
-          <button
-            onClick={() => setShowA11yModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Accessibility className="w-3.5 h-3.5 text-teal-500" />
-            <span>A11y</span>
-          </button>
-          <button
-            onClick={() => setShowScanModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Camera className="w-3.5 h-3.5 text-sky-500" />
-            <span>Camera</span>
-          </button>
-          <button
-            onClick={() => setShowBatchModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <Layers className="w-3.5 h-3.5 text-indigo-500" />
-            <span>Batch</span>
-          </button>
-          <button
-            onClick={() => setShowAiModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-brand-50 to-indigo-50 dark:from-brand-950/40 dark:to-indigo-950/40 text-brand-600 dark:text-brand-300 hover:opacity-90 border border-brand-200 dark:border-brand-800 shadow-sm"
-            title="AI Document Intelligence (Chat, Summarize & Extract)"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-brand-500" />
-            <span>AI Assistant</span>
-          </button>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setRotation((r) => (r + 90) % 360)}
-            className="text-xs"
-            title="Rotate Page View"
-          >
-            <RotateCw className="w-3.5 h-3.5" />
-            <span>Rotate</span>
-          </Button>
-        </div>
-      </div>
+      {/* Top Contextual Action Toolbar with Categorized Groups */}
+      <ViewerToolbar
+        onOpenOrganize={() => setShowOrganize(true)}
+        onOpenMerge={() => setShowMerge(true)}
+        onOpenSplit={() => setShowSplit(true)}
+        onRotate={() => setRotation((r) => (r + 90) % 360)}
+        isAnnotateActive={showAnnotateToolbar}
+        onToggleAnnotate={() => setShowAnnotateToolbar(!showAnnotateToolbar)}
+        onOpenFormFill={() => setShowFormFill(true)}
+        onOpenWatermark={() => setShowWatermark(true)}
+        onOpenPageNumbers={() => setShowPageNumbers(true)}
+        onOpenMetadata={() => setShowMetadata(true)}
+        onOpenConvertOffice={() => setShowConvertModal(true)}
+        onOpenOcr={() => setShowOcrModal(true)}
+        onOpenTableExtract={() => setShowTableModal(true)}
+        onOpenConvertImages={() => setShowConvert(true)}
+        onOpenSignature={() => setShowSignaturePad(true)}
+        onOpenCertificate={() => setShowCertModal(true)}
+        onOpenSecurity={() => setShowSecurity(true)}
+        onOpenRedact={() => setShowRedaction(true)}
+        onOpenCompress={() => setShowCompress(true)}
+        onOpenRepair={() => setShowOptimizeAdvanced(true)}
+        onOpenCompare={() => setShowCompareModal(true)}
+        onOpenCameraScan={() => setShowScanModal(true)}
+        onOpenBatch={() => setShowBatchModal(true)}
+        onOpenA11y={() => setShowA11yModal(true)}
+        onOpenAi={() => setShowAiModal(true)}
+      />
 
       {/* Phase 2: Embedded Annotation Toolbar */}
       {showAnnotateToolbar && (

@@ -14,6 +14,9 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    watch: {
+      ignored: ['**/node_modules/**', '**/.git/**'],
+    },
   },
   test: {
     pool: 'forks',

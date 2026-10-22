@@ -1,3 +1,10 @@
+import os
+
+# Constrain thread pools to avoid excessive buffer allocation and OpenBLAS failures on memory-constrained systems
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+
 import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
