@@ -42,8 +42,11 @@ cd apps/api && pip install -r requirements.txt && cd ../..
 # 3. Start Frontend (React/Vite)
 npm run dev
 
-# 4. In a second terminal, start Backend (FastAPI)
-npm run api:dev
+# 4. Start Backend (FastAPI)
+npm run api
+
+# Alternatively: Start BOTH together with a single command
+npm start
 ```
 
 - **Frontend Client:** `http://localhost:5173`
